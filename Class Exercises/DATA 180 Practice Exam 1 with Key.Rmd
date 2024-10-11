@@ -64,6 +64,7 @@ d) The budget of the `IT` department has increased by 1.5 million. Update the `d
 ```{r}
 # Update the budget of IT department
 department_budget[department_budget$Department == "IT",]$Budget <- department_budget[department_budget$Department == "IT",]$Budget + 1.5
+department_budget[department_budget$Department == "IT", "Budget"] <- department_budget[department_budget$Department == "IT", "Budget"] + 1.5
 department_budget
 ```
 
@@ -131,6 +132,9 @@ c) Plot a bar chart that shows the total sales of `Product_A` and `Product_B` co
 library(ggplot2)
 barplot(sales_data$Total_Sales,col=c(1:4),names=sales_data$Quarter,xlab="Quarters",ylab="Total Sales")
 ggplot(sales_data,aes(Quarter,Total_Sales))+geom_bar(stat="identity",fill=1:4)
+
+
+ggplot(sales_data, aes(Quarter, Total_Sales, fill = Quarter)) + geom_bar(stat="identity")
 ```
 
 d) Write a function named `quarter_summary` that takes the sales data and returns the average sales of `Product_A` and `Product_B`.
@@ -143,6 +147,7 @@ quarter_summary <- function(sales_data) {
   result <- c(avg_product_a,avg_product_b)
   return(result)
 }
+
 
 quarter_summary(sales_data)
 ```
@@ -181,11 +186,12 @@ b) Write a function named `course_summary` that takes a data frame of courses an
 
 ```{r}
 # Create the function to count courses by difficulty level
-course_summary <- function(courses) {
-  table(courses$difficulty)
+course_summary1 <- function(df){
+    table(df$difficulty)
 }
 
-course_summary(courses)
+course_summary1(courses)
+
 ```
 
 
