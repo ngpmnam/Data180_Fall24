@@ -1,7 +1,7 @@
 
 ---
 title: "dplyr Practice Problems"
-author: "Your Name"
+author: "Nam Nguyen"
 date: "`r Sys.Date()`"
 output: html_document
 ---
@@ -27,7 +27,9 @@ library(ggplot2) # Contains the diamonds dataset
 
 
 ```{r}
-
+data(diamonds)
+head(diamonds)
+glimpse(diamonds)
 ```
 
 # Problem 2: Selecting Columns
@@ -40,7 +42,9 @@ library(ggplot2) # Contains the diamonds dataset
 
 
 ```{r}
-
+diamonds_small <- diamonds %>% 
+  select(carat, cut, color, price)
+head(diamonds_small)
 ```
 
 # Problem 3: Filtering Rows
@@ -54,8 +58,10 @@ library(ggplot2) # Contains the diamonds dataset
 
 
 ```{r}
+ideal_E_diamonds <- diamonds %>% filter(cut == "Ideal" & color == "E")
+ideal_E_diamonds
 
-
+#There are 3903 diamonds meet these criteria
 ```
 
 # Problem 4: Arranging Rows
@@ -68,7 +74,7 @@ library(ggplot2) # Contains the diamonds dataset
 
 
 ```{r}
-
+arrange(diamonds, desc(price))
 ```
 
 # Problem 5: Creating New Variables
@@ -81,7 +87,9 @@ library(ggplot2) # Contains the diamonds dataset
 
 
 ```{r}
-
+newDiamonds <- diamonds %>% mutate(price_per_carat = (price / carat)) %>% select(price, carat, price_per_carat)
+newDiamonds2 <- diamonds %>% mutate(price_per_depth = (price/depth)) %>% select(price, depth, price_per_depth)
+head(diamonds)
 ```
 
 # Problem 6: Summarizing Data
@@ -94,6 +102,10 @@ library(ggplot2) # Contains the diamonds dataset
 
 
 ```{r}
+diamonds %>% 
+  group_by(cut) %>% 
+  summarize(ave_price_for_each_cut = mean(price))
+
 
 ```
 
@@ -110,7 +122,9 @@ library(ggplot2) # Contains the diamonds dataset
 
 
 ```{r}
-
+diamonds %>% filter(carat > 1.5) %>% mutate(price_per_carat = (price / carat)) %>% 
+  arrange(price_per_carat) %>%
+  select(carat, cut, color, price_per_carat) %>% head(10)
 ```
 
 # Problem 8: Counting and Tallying
@@ -124,6 +138,12 @@ library(ggplot2) # Contains the diamonds dataset
 
 
 ```{r}
+diamonds %>% mutate(combination = paste(cut, color, sep = ' ')) %>%
+  group_by(combination) %>% 
+  summarize(count = n()) %>% arrange(desc(count)) %>% head(10)
+
+diamonds %>% group_by(cut, color) %>% summarize(count = n()) 
+
 
 ```
 
@@ -137,6 +157,12 @@ library(ggplot2) # Contains the diamonds dataset
 
 
 ```{r}
+diamonds %>% summarize(avg_price = mean(price))
+
+  diamonds %>% sample_n(10000) %>% summarize(avg_price_sample = mean(price))
+
+
+
 
 ```
 
