@@ -1,5 +1,5 @@
 cluster_data = read.csv('~/GitHub/Data180_Fall24/Class Exercises/cluster_data.csv')
-plot(cluster_data)
+plot(cluster_data, pch=1)
 kmeans_3 <- kmeans(cluster_data, centers = 3)
 kmeans_4 <- kmeans(cluster_data, centers = 4)
 
@@ -38,9 +38,9 @@ plot(c(2:10), wgss, type='b', pch=16)
 
 #------------------------------------------------------------------------------
 chindex <- c()
-for (i in 1:9){
-  chindex[i] <- (kmeans(cluster_data, centers = i+1, nstart = 50)$betweenss/(i+1-1))/
-    (kmeans(cluster_data, centers = i +1, nstart = 50)$tot.withinss/(nrow(cluster_data)+1))
+for (i in 2:10){
+  chindex[i-1] <- (kmeans(cluster_data, centers = i, nstart = 50)$betweenss/(i-1))/
+    (kmeans(cluster_data, centers = i, nstart = 50)$tot.withinss/(nrow(cluster_data)-i))
 }
 plot(c(2:10), chindex, type='b', pch=19)
   

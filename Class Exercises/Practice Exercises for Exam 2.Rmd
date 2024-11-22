@@ -18,6 +18,8 @@ Load the `mtcars` dataset. Use `dplyr` to filter rows where the `mpg` is greater
 
 ```{r}
 data(mtcars)
+
+mtcars %>% filter (mpg > 25) %>% head(5)
 ```
 
 ### Question 2
@@ -25,6 +27,9 @@ Using the `iris` dataset, group the data by `Species` and calculate the mean `Se
 
 ```{r}
 data(iris)
+head(iris)
+
+iris %>% group_by(Species) %>% summarize(mean = mean(Sepal.Length))
 ```
 
 ### Question 3
@@ -32,6 +37,8 @@ Select only the `cyl` and `hp` columns from the `mtcars` dataset and arrange the
 
 ```{r}
 data(mtcars)
+
+mtcars %>% select(cyl, hp) %>% arrange(desc(hp))
 ```
 
 ### Question 4
@@ -39,6 +46,8 @@ Use `mutate` on the `mtcars` dataset to create a new column `weight_kg` by conve
 
 ```{r}
 data(mtcars)
+
+mtcars %>% mutate(weight_kg = wt * 1000 * 0.453592)
 ```
 
 ### Question 5
@@ -78,6 +87,8 @@ Compute the Euclidean distances between rows of the `mtcars` dataset using only 
 
 ```{r}
 data(mtcars)
+
+dist_obj <- mtcars %>% select(mpg, disp, hp) %>% as.matrix() %>% dist()
 ```
 
 ### Question 10
@@ -85,6 +96,8 @@ Using the `iris` dataset, calculate the Manhattan distances between the first 10
 
 ```{r}
 data(iris)
+
+head(iris %>% select(Sepal.Length, Petal.Length), 10) %>% as.matrix() %>% dist(method = 'manhattan')
 ```
 
 ### Question 11
@@ -92,6 +105,8 @@ Using the `mtcars` dataset's `mpg` and `hp` columns compute the Euclidean distan
 
 ```{r}
 data(mtcars)
+
+distance_minkowski <- mtcars %>% select(mpg, hp) %>% as.matrix() %>% dist(method = 'minkowski', p = 1.5)
 ```
 
 
@@ -100,6 +115,16 @@ Perform hierarchical clustering on the `iris` dataset using only the `Sepal.Leng
 
 ```{r}
 data(iris)
+
+h_clust <- iris %>% 
+  select(Sepal.Length, Sepal.Width) %>% as.matrix() %>% 
+  dist() %>%
+  hclust()
+
+plot(h_clust)
+
+
+
 ```
 
 ### Question 13
@@ -107,6 +132,10 @@ Using the `mtcars` dataset, cluster the cars based on the `mpg`, `hp`, and `wt` 
 
 ```{r}
 data(mtcars)
+
+h_clust13 <- mtcars %>% select(mpg, hp, wt) %>% as.matrix() %>% dist() %>% hclust(method = 'average')
+
+plot(h_clust13)
 ```
 
 ### Question 14
@@ -114,6 +143,13 @@ Write R code to put rectangles around 3 clusters in the dendrogram from clusteri
 
 ```{r}
 data(iris)
+
+h_clust <- iris %>% select(Sepal.Length, Sepal.Width) %>% as.matrix() %>% dist() %>%
+  hclust()
+
+plot(h_clust)
+rect.hclust(h_clust, k = 3)
+
 ```
 
 ### Question 15
@@ -135,6 +171,27 @@ Using the `mtcars` dataset, determine the optimal number of clusters (`k`) using
 
 ```{r}
 data(mtcars)
+
+new_mt <- mtcars %>% select(mpg, hp, wt)
+
+wgss = c()
+for(i in 1:10){
+  wgss[i] <- kmeans(new_mt, center = i, nstart = 100)$tot.withinss
+}
+
+plot(c(1:10), wgss, type='b', pch=19)
+
+
+
+
+
+
+ch <- c()
+for(i in 1:20){
+  ch[i] <- (kmeans(new_mt, center = i+1, nstart = 100)$betweenss/(i+1-1))/(kmeans(new_mt, center = i+1, nstart = 100)$tot.withinss/(nrow(new_mt)-i-1))
+}
+
+plot(c(1:20), ch, type='b', pch=19)
 ```
 
 ### Question 18
